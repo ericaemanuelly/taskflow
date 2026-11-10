@@ -1,0 +1,32 @@
+name: CI - TaskFlow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  testes-e-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Executar testes
+        run: npm test
+
+      - name: Verificar codigo
+        run: npm run lint
+
+      - name: Gerar build
+        run: npm run build
