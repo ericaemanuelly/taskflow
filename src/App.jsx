@@ -1,15 +1,25 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [tarefas, setTarefas] = useState([
-    { id: 1, nome: 'Estudar React', concluida: false },
-    { id: 2, nome: 'Organizar o projeto TaskFlow', concluida: true },
-    { id: 3, nome: 'Aprender GitHub Actions', concluida: false }
-  ])
+  const [tarefas, setTarefas] = useState(() => {
+    const tarefasSalvas = localStorage.getItem('taskflow-tarefas')
+
+    return tarefasSalvas
+      ? JSON.parse(tarefasSalvas)
+      : [
+          { id: 1, nome: 'Estudar React', concluida: false },
+          { id: 2, nome: 'Organizar o projeto TaskFlow', concluida: true },
+          { id: 3, nome: 'Aprender GitHub Actions', concluida: false }
+        ]
+  })
 
   const [novaTarefa, setNovaTarefa] = useState('')
+
+  useEffect(() => {
+    localStorage.setItem('taskflow-tarefas', JSON.stringify(tarefas))
+  }, [tarefas])
 
   function adicionarTarefa(e) {
     e.preventDefault()
@@ -93,4 +103,5 @@ function App() {
 }
 
 export default App
+
 
